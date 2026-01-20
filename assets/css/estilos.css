@@ -80,7 +80,7 @@ h2:after {
 /* Home-container */
 
 header {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.705), rgba(0, 0, 0, 0.705)), url(../images/backgroundp.jpeg);
+    background-image: linear-gradient(rgba(0, 0, 0, 0.705), rgba(0, 0, 0, 0.705)), url(../images/backgroundp.jpg);
     background-size: cover;
     background-position: center;
     height: 100vh;
@@ -286,8 +286,8 @@ input[type=checkbox] {
 /* image footer */
 
 .section-img-footer {
-    background-image: -webkit-linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url(../images/backgroundp.jpeg);
-    background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url(../images/backgroundp.jpeg);
+    background-image: -webkit-linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url(../images/backgroundp.jpg);
+    background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url(../images/backgroundp.jpg);
     background-size: cover;
     color: #fff;
     background-attachment: fixed;
