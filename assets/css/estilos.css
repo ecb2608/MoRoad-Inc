@@ -80,7 +80,7 @@ h2:after {
 /* Home-container */
 
 header {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.705), rgba(0, 0, 0, 0.705)), url(../images/background.jpg);
+    background-image: linear-gradient(rgba(0, 0, 0, 0.705), rgba(0, 0, 0, 0.705)), url(../images/background);
     background-size: cover;
     background-position: center;
     height: 100vh;
