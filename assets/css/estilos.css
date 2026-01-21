@@ -242,11 +242,11 @@ input[type=submit]:hover {
 .photo img {
     opacity: 0.7;
     width: 100%;
-    height: auto;
+    height: 250px;
     object-fit: cover;   /* ¡ESTA ES LA CLAVE! Recorta la imagen para que llene el espacio sin estirarse */
     display: block;
     transform: scale(1.15);
-    transition: transform 0.5s, opacity0.5s;
+    transition: transform 0.5s, opacity 0.5s;
     -webkit-transform: scale(1.15);
     -ms-transform: scale(1.15);
     -webkit-transition: -webkit-transform 0.5s, opacity 0.5s;
