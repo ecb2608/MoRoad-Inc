@@ -362,6 +362,10 @@ footer {
     color: #DD2A7B;
 }
 
+.fa-tiktok:hover {
+    color: #fafafa;
+}
+
 footer p {
     color: #888;
     text-align: center;
