@@ -141,129 +141,98 @@
     }
 
     /* ============================================================
-   7. ESTILO DE LA TARJETA DE ÉXITO (LOGO Y TIPOGRAFÍA)
+   7. TARJETA DE ÉXITO - VERSIÓN FINAL "ESCAPE DE IFRAME"
    ============================================================ */
 #custom-success-card {
-    position: absolute; /* Coloca el mensaje sobre el formulario sin mover nada */
-    top: 0; left: 0;
-    width: 100%; height: 100%;
+    /* 'fixed' asegura que cubra todo el espacio visual disponible del iframe */
+    position: fixed !important; 
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
     
-    /* FONDO Y BLUR: Fondo blanco casi opaco (0.9) con efecto de desenfoque */
-    background-color: rgba(255, 255, 255, 0.9) !important; 
-    backdrop-filter: blur(8px); /* Crea el efecto de vidrio borroso */
-    -webkit-backdrop-filter: blur(8px); /* Compatibilidad para navegadores Safari/iOS */
+    /* Fondo sólido para tapar cualquier residuo del formulario */
+    background-color: #ffffff !important;
     
-    z-index: 100; /* Asegura que el mensaje tape los campos del formulario */
-    display: flex; align-items: center; justify-content: center;
-    border-radius: 12px; /* Redondeo de esquinas para que encaje en tu tarjeta */
-    transition: opacity 0.5s ease-in-out; /* Fundido suave al aparecer */
+    /* Prioridad máxima absoluta */
+    z-index: 999999999 !important;
+    
+    /* Flexbox para centrar logo y textos */
+    display: none; /* El JS cambia esto a 'flex' al detectar el éxito */
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
 }
 
-/* --- ANIMACIÓN DEL LOGO --- */
-.success-icon { 
-    margin-bottom: 25px; /* Espacio entre el logo y el título */
-    display: inline-block; /* Permite que el logo se mueva correctamente */
-    
-    /* Animación "bounceLogo": 0.8s de duración, movimiento infinito y alternado */
-    animation: bounceLogo 1s ease-in-out infinite alternate;
+/* Clase que activa la visibilidad */
+.success-visible { 
+    display: flex !important; 
 }
 
-/* Definimos el movimiento del logo (sube y baja ligeramente) */
-@keyframes bounceLogo {
-    from { transform: translateY(0); }
-    to { transform: translateY(-8px); } /* Sube 8 píxeles */
-}
-
-/* --- CONTROL DE TIPOGRAFÍA DE LOS MENSAJES --- */
+/* --- CONTROL DE TIPOGRAFÍA --- */
 .card-content h2 { 
-    /* Cambia aquí la fuente, tamaño y color del Título */
-    font-family: 'Roboto', sans-serif; /* Puedes poner la fuente de tu web aquí */
-    color: rgb(15, 99, 167); /* Color azul Motorcycles Road Inc. */
-    font-size: 24px; /* Tamaño del título */
-    font-weight: 900; /* Grosor de la letra (muy negrita) */
-    margin: 0 0 10px 0; /* Margen inferior para separar del párrafo */
-    text-transform: uppercase; /* Fuerza el título a mayúsculas */
-    letter-spacing: 1.5px; /* Espaciado entre letras para un look moderno */
+    font-family: 'Roboto', sans-serif !important;
+    color: rgb(15, 99, 167) !important; /* Azul de tu marca */
+    font-size: 26px !important;
+    font-weight: 900 !important;
+    margin-bottom: 15px !important;
+    text-transform: uppercase !important;
 }
 
 .card-content p { 
-    /* Cambia aquí la fuente y estilo del mensaje descriptivo */
-    font-family: 'Roboto', sans-serif;
-    color: #444444; /* Color gris oscuro para lectura fácil */
-    font-size: 16px; /* Tamaño del texto */
-    line-height: 1.6; /* Altura de línea para que el texto no esté amontonado */
-    font-weight: 400; /* Grosor normal */
-    margin: 0; /* Sin márgenes extra */
+    font-family: 'Roboto', sans-serif !important;
+    color: #333333 !important;
+    font-size: 16px !important;
+    line-height: 1.6 !important;
+    padding: 0 20px !important; /* Evita que el texto toque los bordes en móvil */
 }
 
-/* --- CONTROL DE VISIBILIDAD --- */
-.success-hidden { 
-    opacity: 0; 
-    visibility: hidden; 
-    pointer-events: none; /* Inhabilita clics mientras está oculto */
+/* --- BOTÓN CERRAR (ACCESO DIRECTO) --- */
+#close-success {
+    position: absolute !important;
+    top: 20px !important;
+    right: 20px !important;
+    background: #eeeeee !important; /* Gris claro para que resalte */
+    color: #333 !important;
+    border: none !important;
+    width: 45px !important;
+    height: 45px !important;
+    border-radius: 50% !important;
+    font-size: 28px !important;
+    cursor: pointer !important;
+    z-index: 1000000000 !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s ease;
 }
 
-.success-visible { 
-    opacity: 1 !important; 
-    visibility: visible !important; 
-    pointer-events: all !important; /* Habilita clics cuando se muestra */
+#close-success:hover {
+    background: #dddddd !important;
 }
 
 /* --- BARRA DE PROGRESO --- */
 .progress-container {
-    width: 70%; /* Ancho de la barra respecto a la tarjeta */
-    background: #e0e0e0; /* Color gris de fondo de la barra */
-    height: 4px; /* Grosor de la barra */
-    margin: 25px auto 0 auto; /* Centrado y separación superior */
-    border-radius: 10px; 
-    overflow: hidden; /* Corta el color azul cuando se llena */
+    width: 200px; /* Ancho fijo para que se vea elegante */
+    background: #f0f0f0;
+    height: 5px;
+    margin-top: 30px;
+    border-radius: 10px;
+    overflow: hidden;
 }
 
 .progress-bar {
-    height: 100%; 
-    background: rgb(15, 99, 167); /* Color azul que se va llenando */
-    width: 0%; /* Inicia vacía */
+    height: 100%;
+    background: rgb(15, 99, 167);
+    width: 0%;
 }
-
-/* --- BOTÓN DE CERRAR DENTRO DE LA TARJETA --- */
-#close-success {
-    position: absolute; /* Se ubica de forma independiente dentro de la tarjeta */
-    top: 15px;          /* Distancia desde el borde superior */
-    right: 15px;        /* Distancia desde el borde derecho */
-    background: none;   /* Sin fondo */
-    border: none;       /* Sin bordes */
-    font-size: 28px;    /* Tamaño de la 'X' */
-    color: #999;        /* Color gris suave inicial */
-    cursor: pointer;    /* Cambia el cursor a mano al pasar encima */
-    line-height: 1;     /* Ajusta la altura para que la X esté centrada */
-    transition: color 0.3s ease, transform 0.3s ease; /* Animación suave */
-    z-index: 101;       /* Por encima del contenido del mensaje */
-}
-
-/* Efecto al pasar el mouse por el botón de cerrar */
-#close-success:hover {
-    color: rgb(15, 99, 167); /* Cambia al azul de tu marca */
-    transform: scale(1.2);    /* Crece un poquito para indicar que es clickeable */
-}
-
-/* Ajuste al contenedor padre para que el botón se posicione correctamente */
-#custom-success-card {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background-color: white !important; /* Fondo sólido para tapar todo */
-    display: flex !important; /* Forza el centrado */
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    visibility: hidden;
-}
-
+ 
 </style>
 </head>
+
 <body>
-    <div class="card-form" style="position: relative; overflow: hidden;"> 
+    <div class="card-form" style="position: relative;"> 
         <script>
             (function () { var _sp = window._sp || (window._sp = []); if (!_sp.loaded) { var sps = document.createElement('script'); sps.async = true; sps.src = 'https://assets.upnify.com/scripts/forms/js/spf.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(sps, s); _sp.loaded = true; } })(); window._sp = window._sp || [] ; _sp.addForm = function(config){window._sp.push(config)};
             _sp.addForm({ 'formId': 'eyJlIjoiMTE2NzM1IiwidCI6IlAyNUM1NDY3M0ExLUQyQTEtNDY0Ri04NUE5LTE5OTNCOTQ0RkFFQiJ9' }); 
@@ -271,11 +240,12 @@
         
         <div id="salesUpForm-1"></div>
 
-        <div id="custom-success-card" class="success-hidden" style="z-index: 999999 !important;">
-            <button id="close-success" title="Cerrar">&times;</button>
-            <div class="card-content">
+        <div id="custom-success-card">
+            <button id="close-success" onclick="window.top.location.reload();">&times;</button>
+            
+            <div class="card-content" style="text-align: center;">
                 <div class="success-icon">
-                    <img src="assets/images/logo.png" style="width: 80px; height: auto;" alt="Logo Motorcycles">
+                    <img src="assets/images/logo.png" style="width: 120px; height: auto;" alt="Logo">
                 </div>
                 <h2>¡DATOS RECIBIDOS!</h2>
                 <p>Gracias por contactar a <strong>Motorcycles Road Inc.</strong><br>
@@ -288,48 +258,37 @@
     </div>
 
     <script>
-        window.addEventListener('load', function() {
-            const formContainer = document.querySelector('#salesUpForm-1');
+        function activarExitoTotal() {
             const successCard = document.getElementById('custom-success-card');
+            const formDiv = document.getElementById('salesUpForm-1');
             const progressBar = document.querySelector('.progress-bar');
-            const closeBtn = document.getElementById('close-success');
-            const duracionMensaje = 5000;
-            let mensajeActivado = false;
 
-            const finalizarYLimpiar = () => { window.location.reload(); };
+            // 1. Ocultar formulario
+            if (formDiv) formDiv.style.setProperty('display', 'none', 'important');
 
-            closeBtn.addEventListener('click', finalizarYLimpiar);
+            // 2. Mostrar tarjeta personalizada
+            successCard.classList.add('success-visible');
 
-            // Observador global mejorado
-            const observer = new MutationObserver(function(mutations) {
-                if (mensajeActivado) return; // Evita que se ejecute varias veces
+            // 3. Barra de progreso
+            progressBar.style.animation = "loadingBar 5000ms linear forwards";
 
-                // 1. Buscamos el letrero verde de Upnify por su clase o texto
-                const toastUpnify = document.querySelector('.sp-toast, .sp-message-container');
-                const textoExito = document.body.innerText.includes('Exito') || document.body.innerText.includes('enviados');
+            // 4. RECARGA DE LA PÁGINA PADRE (La web principal) en 5 segundos
+            setTimeout(() => {
+                window.top.location.reload();
+            }, 5000);
+        }
 
-                if (toastUpnify || textoExito) {
-                    mensajeActivado = true;
-
-                    // A. OCULTAR TODO LO DE UPNIFY (Incluso el aviso verde)
-                    if(toastUpnify) toastUpnify.style.display = 'none';
-                    formContainer.style.visibility = 'hidden'; // Oculta el formulario original pero mantiene el espacio
-                    
-                    // B. MOSTRAR TU TARJETA
-                    successCard.classList.remove('success-hidden');
-                    successCard.classList.add('success-visible');
-                    
-                    // C. ANIMAR BARRA
-                    progressBar.style.animation = `loadingBar ${duracionMensaje}ms linear forwards`;
-
-                    // D. RECARGA AUTOMÁTICA
-                    setTimeout(finalizarYLimpiar, duracionMensaje);
-                }
-            });
-
-            // Vigilamos el body y el contenedor del formulario
-            observer.observe(document.body, { childList: true, subtree: true });
+        // El observador ahora busca cualquier cambio de texto que indique éxito
+        const guardian = new MutationObserver((mutations) => {
+            const bodyText = document.body.innerText;
+            // Si detectamos éxito, activamos nuestra capa
+            if (bodyText.includes("Exito") || bodyText.includes("enviados") || bodyText.includes("gracias")) {
+                guardian.disconnect();
+                activarExitoTotal();
+            }
         });
+
+        guardian.observe(document.body, { childList: true, subtree: true });
     </script>
 </body>
 </html>
