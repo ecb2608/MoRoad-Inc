@@ -4,118 +4,149 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet">
    
 <style>
+    /* ============================================================
+       1. ELIMINACIÓN RADICAL DE CABECERAS (CUADRO GRIS)
+       ============================================================ */
+    /* Estas líneas buscan cualquier rastro del diseño original de Upnify y lo borran */
+    #salesUpForm-1 .sp-form-header, 
+    #salesUpForm-1 .panel-heading, 
+    #salesUpForm-1 .panel-title, 
+    #salesUpForm-1 header,
+    #salesUpForm-1 div[class*="header"],
+    #salesUpForm-1 div[class*="heading"] {
+        display: none !important;      /* Oculta el elementos del diseño visual completamente */
+        height: 0 !important;        /* Asegura que no ocupe espacio vertical */
+        margin: 0 !important;        /* Quita espacios exteriores */
+        padding: 0 !important;       /* Quita espacios interiores */
+        border: none !important;      /* Elimina cualquier línea de borde */
+    }
+
+    /* Quita el borde y la sombra que Upnify le pone al recuadro interno */
+    /* Limpiamos el contenedor "Panel" que Upnify trae por defecto para que sea invisible */
+    #salesUpForm-1 .panel, 
+    #salesUpForm-1 .sp-form-container {
+        border: none !important;   /* Quita el borde gris del cuadro original */
+        box-shadow: none !important;    /* Quita la sombra predeterminada de Upnify */
+        background: transparent !important; /* Hace que el fondo de Upnify sea invisible */
+    }
+
+    /* ============================================================
+       2. CONFIGURACIÓN DEL CUERPO (BACKGROUND)
+       ============================================================ */
+    /* NOTA: Si no ves el color aquí, es porque el Iframe en tu index.html 
+       podría tener su propio color de fondo que lo tapa. */
     body { 
         margin: 0; 
-        padding: 20px; 
+        padding: 30px 15px; 
         font-family: 'Roboto', sans-serif; 
-        background-color: #f4f4f4;
-        display: flex;
-        justify-content: center;
+        background-color: #f4f7f9 !important; /* <--- CAMBIA ESTE COLOR para el fondo fuera de la tarjeta */
+        display: flex;             /* Activa el modo de alineación */
+        justify-content: center;   /* Centra la tarjeta horizontalmente */
     }
 
-    .card-form {
-        background-color: #ffffff;
-        padding: 30px;
-        border-radius: 8px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        width: 100%;
-        max-width: 550px;
-        border-top: 5px solid rgb(15, 99, 167);
+    /* ============================================================
+       3. DISEÑO DE TARJETA (LA "CARD" BLANCA)
+       ============================================================ */
+    /* Este es el contenedor que creamos para que el formulario parezca una tarjeta moderna */
+
+    #salesUpForm-1 {
+        background-color: #ffffff !important; /* Color de fondo de la tarjeta */
+        padding: 40px !important;            /* Espacio entre el borde y los campos */
+        border-radius: 12px !important;      /* Redondeo de las esquinas */
+        box-shadow: 0 12px 35px rgba(0,0,0,0.1) !important; /* Sombra para dar profundidad */
+        width: 100% !important;              /* Se adapta al ancho disponible */
+        max-width: 500px !important;         /* No permite que sea más ancha de 500px */
+        border-top: 6px solid rgb(15, 99, 167) !important; /* La línea azul superior */
+        box-sizing: border-box !important;   /* Asegura que el padding no afecte el ancho total */
     }
 
-    /* 1. ETIQUETAS EN NEGRITA */
+    /* ============================================================
+       4. ESTILO DE ETIQUETAS (NOMBRES DE LOS CAMPOS)
+       ============================================================ */
     #salesUpForm-1 label {
-        font-weight: 700 !important;
-        color: #333;
-        font-size: 13px;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        display: block;
-        margin-bottom: 8px;
+        font-weight: 700 !important;         /* Pone el texto en negrita */
+        color: #333 !important;              /* Color del texto */
+        font-size: 12px !important;          /* Tamaño de la letra */
+        text-transform: uppercase !important; /* Convierte todo a MAYÚSCULAS */
+        letter-spacing: 1px !important;      /* Espacio entre letras */
+        margin-bottom: 8px !important;       /* Separación con el campo de abajo */
+        display: block !important;           /* Hace que ocupe toda la línea */
     }
 
-    /* 2. INPUTS DE TEXTO */
-    #salesUpForm-1 input[type="text"],
-    #salesUpForm-1 input[type="email"],
-    #salesUpForm-1 input[type="tel"],
-    #salesUpForm-1 textarea {
-        width: 100% !important;
-        padding: 12px !important;
-        margin-bottom: 20px !important;
-        border: 1px solid #ddd !important;
-        border-radius: 4px !important;
-        font-family: 'Roboto', sans-serif !important;
-        box-sizing: border-box !important;
-    }
-
-    /* 3. LISTA DESPLEGABLE (OFERTA COMERCIAL) */
+    /* ============================================================
+       5. CAMPOS E INPUTS (DONDE ESCRIBE EL USUARIO)
+       ============================================================ */
+    #salesUpForm-1 input, 
     #salesUpForm-1 select {
-        height: 55px !important; /* Altura para que el texto no se corte */
-        line-height: 1.5 !important;
-        padding: 10px 15px !important;
-        border: 1px solid #ddd !important;
-        border-radius: 4px !important;
-        font-family: 'Roboto', sans-serif !important;
-        font-size: 16px !important;
-        background-color: #fff !important;
-        color: #333 !important;
-        width: 100% !important;
-        margin-bottom: 25px !important;
-        cursor: pointer;
-        /* Limpiamos estilos de sistema para forzar despliegue hacia abajo */
-        appearance: none !important;
-        -webkit-appearance: none !important;
-        -moz-appearance: none !important;
-        background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M10.293 3.293L6 7.586 1.707 3.293A1 1 0 00.293 4.707l5 5a1 1 0 001.414 0l5-5a1 1 0 10-1.414-1.414z'/%3E%3C/svg%3E") !important;
-        background-repeat: no-repeat !important;
-        background-position: right 15px center !important;
+        width: 100% !important;              /* Ancho completo */
+        height: 48px !important;             /* Altura del campo */
+        padding: 10px 15px !important;       /* Espacio del texto interno */
+        margin-bottom: 20px !important;      /* Espacio entre un campo y el siguiente */
+        border: 1px solid #ddd !important;   /* Borde gris claro */
+        border-radius: 6px !important;       /* Redondeo suave de los campos */
+        font-size: 15px !important;          /* Tamaño del texto que escribe el usuario */
+        background-color: #fcfcfc !important; /* Color de fondo del campo */
+        box-sizing: border-box !important;  /* Evita que el campo se salga de la tarjeta */
     }
 
-    /* 4. COLORES DE LAS OPCIONES */
-    #salesUpForm-1 select option {
-        background-color: #ffffff !important;
-        color: #d1a158f8 !important;
-        padding: 12px !important;
+    /* ------------------------------------------------------------
+       ESTADO FOCUS (AL DAR CLIC): CAMBIO DE BORDE Y SOMBREADO (GLOW)
+       ------------------------------------------------------------ */
+    #salesUpForm-1 input:focus, 
+    #salesUpForm-1 select:focus {
+        border-color: rgb(15, 167, 114) !important; /* El borde cambia a azul */
+        background-color: #fff !important;         /* El fondo se vuelve blanco puro */
+        outline: none !important;                  /* Quita el borde amarillo de Chrome */
+    /* EL SOMBREADO : 
+           0 0 0 -> Posición X, Y y Difuminado.
+           3px -> Es el grosor del "aura" o sombreado.
+           rgba(15, 99, 167, 0.1) -> El color azul con un 10% de opacidad.
+           PARA QUITARLO: Cambia la línea de abajo por: box-shadow: none !important; */
+        box-shadow: 0 0 0 3px rgba(12, 174, 45, 0.1) !important;
+    
+    
     }
 
-    /* 5. BOTÓN (DISEÑO Y HOVER) */
-    #salesUpForm-1 .btn-prospecto,
-    #salesUpForm-1 button,
+    /* ============================================================
+       6. BOTÓN PERSONALIZADO Y HOVER (Interacción)
+       ============================================================ */
+    /* Aplicamos el estilo al botón en todos sus estados posibles */
+    #salesUpForm-1 .btn-prospecto, 
+    #salesUpForm-1 button, 
     #salesUpForm-1 input[type="submit"] {
-        background-color: transparent !important;
-        background-image: none !important;
-        border: 2px solid rgb(15, 99, 167) !important;
-        color: rgb(15, 99, 167) !important;
-        padding: 12px 45px !important;
-        border-radius: 200px !important;
-        cursor: pointer !important;
-        font-size: 18px !important;
-        font-weight: 700 !important;
-        transition: all 0.3s ease !important;
-        display: block !important;
-        margin: 30px auto 10px auto !important;
-        text-transform: uppercase !important;
-        width: auto !important;
-        box-shadow: none !important;
+        background-color: transparent !important;   /* Fondo transparente inicial */
+        background-image: none !important;          /* Quita degradados de Upnify */
+        border: 2px solid rgb(15, 99, 197) !important; /* Borde azul */
+        color: rgb(15, 99, 167) !important;         /* Texto azul */
+        padding: 12px 45px !important;              /* Tamaño del botón */
+        border-radius: 200px !important;            /* Forma de cápsula/circular */
+        font-weight: 700 !important;                /* Texto en negrita */
+        text-transform: uppercase !important;       /* Texto en MAYÚSCULAS */
+        cursor: pointer !important;                 /* Cambia el cursor a "manita" */
+        display: block !important;                  /* Permite centrar el botón */
+        margin: 20px auto 0 auto !important;        /* Centrado horizontal */
+        transition: all 0.3s ease-in-out !important; /* Animación suave para el hover */
+        width: auto !important;                     /* El ancho depende del texto */
     }
 
-    #salesUpForm-1 .btn-prospecto:hover,
-    #salesUpForm-1 button:hover,
+    /* ESTADO HOVER: Se activa al pasar el mouse */
+    /* He añadido selectores más específicos para que no deje de funcionar */
+    #salesUpForm-1 .btn-prospecto:hover, 
+    #salesUpForm-1 button:hover, 
     #salesUpForm-1 input[type="submit"]:hover {
-        background-color: rgb(15, 99, 167) !important;
-        color: #ffffff !important;
-        transform: translateY(-3px) !important;
-        box-shadow: 0 5px 15px rgba(15, 99, 167, 0.4) !important;
+        background-color: rgb(15, 99, 167) !important; /* El fondo se vuelve azul */
+        color: #ffffff !important;                    /* El texto se vuelve blanco */
+        transform: translateY(-2px) !important;       /* El botón sube un poquito */
+        box-shadow: 0 5px 15px rgba(15, 99, 167, 0.4) !important; /* Sombra azul brillante */
     }
 </style>
-
 </head>
 <body>
     <div class="card-form">
-        <script>
-            (function () { var _sp = window._sp || (window._sp = []); if (!_sp.loaded) { var sps = document.createElement('script'); sps.async = true; sps.src = 'https://assets.upnify.com/scripts/forms/js/spf.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(sps, s); _sp.loaded = true; } })(); window._sp = window._sp || [] ; _sp.addForm = function(config){window._sp.push(config)};
-            _sp.addForm({ 'formId': 'eyJlIjoiMTE2NzM1IiwidCI6IlAyNUNERUQ3NjY4LUNGOTYtNDI0Qi1BNkVFLTlBOUFCREU5OTJFQyJ9' }); 
-        </script>
+    <script>
+    (function () { var _sp = window._sp || (window._sp = []); if (!_sp.loaded) { var sps = document.createElement('script'); sps.async = true; sps.src = 'https://assets.upnify.com/scripts/forms/js/spf.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(sps, s); _sp.loaded = true; } })(); window._sp = window._sp || [] ; _sp.addForm = function(config){window._sp.push(config)};
+    _sp.addForm({ 'formId': 'eyJlIjoiMTE2NzM1IiwidCI6IlAyNUM1NDY3M0ExLUQyQTEtNDY0Ri04NUE5LTE5OTNCOTQ0RkFFQiJ9' }); 
+    </script>
         <div id="salesUpForm-1"></div>
     </div>
 </body>
