@@ -251,20 +251,19 @@
     position: absolute;
     top: 0; left: 0;
     width: 100%; height: 100%;
-    background-color: rgba(255, 255, 255, 0.95) !important; /* Un poco más opaco para leer mejor */
-    backdrop-filter: blur(10px); /* Efecto de desenfoque */
-    -webkit-backdrop-filter: blur(10px);
-    z-index: 100;
-    display: flex;
+    background-color: white !important; /* Fondo sólido para tapar todo */
+    display: flex !important; /* Forza el centrado */
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    border-radius: 12px;
+    opacity: 0;
+    visibility: hidden;
 }
 
 </style>
 </head>
 <body>
-    <div class="card-form" style="position: relative;"> 
+    <div class="card-form" style="position: relative; overflow: hidden;"> 
         <script>
             (function () { var _sp = window._sp || (window._sp = []); if (!_sp.loaded) { var sps = document.createElement('script'); sps.async = true; sps.src = 'https://assets.upnify.com/scripts/forms/js/spf.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(sps, s); _sp.loaded = true; } })(); window._sp = window._sp || [] ; _sp.addForm = function(config){window._sp.push(config)};
             _sp.addForm({ 'formId': 'eyJlIjoiMTE2NzM1IiwidCI6IlAyNUM1NDY3M0ExLUQyQTEtNDY0Ri04NUE5LTE5OTNCOTQ0RkFFQiJ9' }); 
@@ -272,8 +271,8 @@
         
         <div id="salesUpForm-1"></div>
 
-        <div id="custom-success-card" class="success-hidden">
-            <button id="close-success" title="Cerrar" aria-label="Cerrar mensaje">&times;</button>
+        <div id="custom-success-card" class="success-hidden" style="z-index: 999999 !important;">
+            <button id="close-success" title="Cerrar">&times;</button>
             <div class="card-content">
                 <div class="success-icon">
                     <img src="assets/images/logo.png" style="width: 80px; height: auto;" alt="Logo Motorcycles">
@@ -290,51 +289,46 @@
 
     <script>
         window.addEventListener('load', function() {
+            const formContainer = document.querySelector('#salesUpForm-1');
             const successCard = document.getElementById('custom-success-card');
             const progressBar = document.querySelector('.progress-bar');
             const closeBtn = document.getElementById('close-success');
-            const duracionMensaje = 5000; // 5 segundos
-            let timeoutRecarga;
+            const duracionMensaje = 5000;
+            let mensajeActivado = false;
 
-            // Función para cerrar y limpiar todo
-            const finalizarMensaje = () => { window.location.reload(); };
+            const finalizarYLimpiar = () => { window.location.reload(); };
 
-            closeBtn.addEventListener('click', finalizarMensaje);
+            closeBtn.addEventListener('click', finalizarYLimpiar);
 
-            /* NUEVA LÓGICA: 
-               Upnify crea elementos de "Exito" fuera de tu div. 
-               Vigilaremos todo el 'document.body' para detectar cuando aparezca 
-               cualquier mensaje de éxito de ellos.
-            */
-            const globalObserver = new MutationObserver(function(mutations) {
-                // Buscamos si existe el mensaje verde de Upnify en la pantalla
-                // Upnify suele usar clases como 'sp-toast' o simplemente inyectar texto
-                const exitoUpnify = document.body.innerText.includes('Exito') || 
-                                    document.body.innerText.includes('enviados');
+            // Observador global mejorado
+            const observer = new MutationObserver(function(mutations) {
+                if (mensajeActivado) return; // Evita que se ejecute varias veces
 
-                if (exitoUpnify) {
-                    // 1. Detenemos al guardia para que no se repita
-                    globalObserver.disconnect();
+                // 1. Buscamos el letrero verde de Upnify por su clase o texto
+                const toastUpnify = document.querySelector('.sp-toast, .sp-message-container');
+                const textoExito = document.body.innerText.includes('Exito') || document.body.innerText.includes('enviados');
 
-                    // 2. Ocultamos CUALQUIER mensaje de Upnify que ande flotando (el verde de arriba)
-                    // Buscamos elementos que Upnify crea dinámicamente y los borramos
-                    const elementosUpnify = document.querySelectorAll('[class*="sp-"], [id*="sp-"]');
-                    elementosUpnify.forEach(el => el.style.display = 'none');
+                if (toastUpnify || textoExito) {
+                    mensajeActivado = true;
 
-                    // 3. Mostramos TU tarjeta personalizada
+                    // A. OCULTAR TODO LO DE UPNIFY (Incluso el aviso verde)
+                    if(toastUpnify) toastUpnify.style.display = 'none';
+                    formContainer.style.visibility = 'hidden'; // Oculta el formulario original pero mantiene el espacio
+                    
+                    // B. MOSTRAR TU TARJETA
                     successCard.classList.remove('success-hidden');
                     successCard.classList.add('success-visible');
                     
-                    // 4. Iniciamos la barra de progreso
+                    // C. ANIMAR BARRA
                     progressBar.style.animation = `loadingBar ${duracionMensaje}ms linear forwards`;
 
-                    // 5. Recarga automática
-                    timeoutRecarga = setTimeout(finalizarMensaje, duracionMensaje);
+                    // D. RECARGA AUTOMÁTICA
+                    setTimeout(finalizarYLimpiar, duracionMensaje);
                 }
             });
 
-            // Empezamos a vigilar TODO el cuerpo de la página
-            globalObserver.observe(document.body, { childList: true, subtree: true });
+            // Vigilamos el body y el contenedor del formulario
+            observer.observe(document.body, { childList: true, subtree: true });
         });
     </script>
 </body>
