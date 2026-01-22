@@ -265,40 +265,22 @@
 </head>
 <body>
     <div class="card-form" style="position: relative;"> 
-        
         <script>
-            (function () { 
-                var _sp = window._sp || (window._sp = []); 
-                if (!_sp.loaded) { 
-                    var sps = document.createElement('script'); 
-                    sps.async = true; 
-                    sps.src = 'https://assets.upnify.com/scripts/forms/js/spf.js'; 
-                    var s = document.getElementsByTagName('script')[0]; 
-                    s.parentNode.insertBefore(sps, s); 
-                    _sp.loaded = true; 
-                } 
-            })(); 
-            window._sp = window._sp || [] ; 
-            _sp.addForm = function(config){window._sp.push(config)};
-            // Aquí se indica qué formulario específico debe dibujarse en pantalla
+            (function () { var _sp = window._sp || (window._sp = []); if (!_sp.loaded) { var sps = document.createElement('script'); sps.async = true; sps.src = 'https://assets.upnify.com/scripts/forms/js/spf.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(sps, s); _sp.loaded = true; } })(); window._sp = window._sp || [] ; _sp.addForm = function(config){window._sp.push(config)};
             _sp.addForm({ 'formId': 'eyJlIjoiMTE2NzM1IiwidCI6IlAyNUM1NDY3M0ExLUQyQTEtNDY0Ri04NUE5LTE5OTNCOTQ0RkFFQiJ9' }); 
         </script>
         
         <div id="salesUpForm-1"></div>
 
         <div id="custom-success-card" class="success-hidden">
-            
-            <button id="close-success" title="Cerrar">&times;</button>
-            
+            <button id="close-success" title="Cerrar" aria-label="Cerrar mensaje">&times;</button>
             <div class="card-content">
                 <div class="success-icon">
                     <img src="assets/images/logo.png" style="width: 80px; height: auto;" alt="Logo Motorcycles">
                 </div>
-                
                 <h2>¡DATOS RECIBIDOS!</h2>
                 <p>Gracias por contactar a <strong>Motorcycles Road Inc.</strong><br>
                 En breve un asesor comercial se comunicará contigo.</p>
-                
                 <div class="progress-container">
                     <div class="progress-bar"></div>
                 </div>
@@ -307,61 +289,52 @@
     </div>
 
     <script>
-        // Se ejecuta solo cuando toda la página y sus recursos han cargado
         window.addEventListener('load', function() {
-            // Referencias a los elementos del HTML para poder manipularlos
-            const formContainer = document.querySelector('#salesUpForm-1');
             const successCard = document.getElementById('custom-success-card');
             const progressBar = document.querySelector('.progress-bar');
             const closeBtn = document.getElementById('close-success');
+            const duracionMensaje = 5000; // 5 segundos
+            let timeoutRecarga;
 
-            const duracionMensaje = 5000; // Definimos que el mensaje dure 5 segundos
-            let timeoutRecarga; // Variable para guardar el temporizador y poder cancelarlo si se usa la 'X'
+            // Función para cerrar y limpiar todo
+            const finalizarMensaje = () => { window.location.reload(); };
 
-            // Función que limpia la pantalla recargando la página
-            const finalizarMensaje = () => {
-                window.location.reload();
-            };
+            closeBtn.addEventListener('click', finalizarMensaje);
 
-            // Si el usuario hace clic en la 'X', recargamos de inmediato
-            closeBtn.addEventListener('click', function() {
-                clearTimeout(timeoutRecarga); // Detenemos el reloj de 5 segundos
-                finalizarMensaje();
-            });
-
-            /* MUTATION OBSERVER: 
-              Es como un guardia de seguridad que vigila el formulario. 
-              Upnify cambia el contenido del DIV cuando el envío es exitoso; 
-              nosotros detectamos ese cambio.
+            /* NUEVA LÓGICA: 
+               Upnify crea elementos de "Exito" fuera de tu div. 
+               Vigilaremos todo el 'document.body' para detectar cuando aparezca 
+               cualquier mensaje de éxito de ellos.
             */
-            const observer = new MutationObserver(function(mutations) {
-                mutations.forEach(function(mutation) {
-                    // Convertimos el texto a minúsculas para evitar errores de detección
-                    const textoForm = formContainer.innerText.toLowerCase();
+            const globalObserver = new MutationObserver(function(mutations) {
+                // Buscamos si existe el mensaje verde de Upnify en la pantalla
+                // Upnify suele usar clases como 'sp-toast' o simplemente inyectar texto
+                const exitoUpnify = document.body.innerText.includes('Exito') || 
+                                    document.body.innerText.includes('enviados');
+
+                if (exitoUpnify) {
+                    // 1. Detenemos al guardia para que no se repita
+                    globalObserver.disconnect();
+
+                    // 2. Ocultamos CUALQUIER mensaje de Upnify que ande flotando (el verde de arriba)
+                    // Buscamos elementos que Upnify crea dinámicamente y los borramos
+                    const elementosUpnify = document.querySelectorAll('[class*="sp-"], [id*="sp-"]');
+                    elementosUpnify.forEach(el => el.style.display = 'none');
+
+                    // 3. Mostramos TU tarjeta personalizada
+                    successCard.classList.remove('success-hidden');
+                    successCard.classList.add('success-visible');
                     
-                    // Si el texto interno ahora dice 'enviados' o 'gracias'...
-                    if (textoForm.includes('enviados') || textoForm.includes('gracias')) {
-                        
-                        // Dejamos de vigilar para ahorrar memoria
-                        observer.disconnect();
+                    // 4. Iniciamos la barra de progreso
+                    progressBar.style.animation = `loadingBar ${duracionMensaje}ms linear forwards`;
 
-                        // Quitamos la clase que lo oculta y ponemos la que lo muestra
-                        successCard.classList.remove('success-hidden');
-                        successCard.classList.add('success-visible');
-                        
-                        // Activamos la animación de la barra de progreso mediante código
-                        progressBar.style.animation = `loadingBar ${duracionMensaje}ms linear forwards`;
-
-                        // Iniciamos la cuenta regresiva para recargar la página
-                        timeoutRecarga = setTimeout(finalizarMensaje, duracionMensaje);
-                    }
-                });
+                    // 5. Recarga automática
+                    timeoutRecarga = setTimeout(finalizarMensaje, duracionMensaje);
+                }
             });
 
-            // Activamos el guardia (observer) para que empiece a mirar dentro del formulario
-            if (formContainer) {
-                observer.observe(formContainer, { childList: true, subtree: true });
-            }
+            // Empezamos a vigilar TODO el cuerpo de la página
+            globalObserver.observe(document.body, { childList: true, subtree: true });
         });
     </script>
 </body>
