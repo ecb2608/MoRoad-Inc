@@ -141,91 +141,41 @@
     }
 
     /* ============================================================
-   7. TARJETA DE ÉXITO - VERSIÓN FINAL "ESCAPE DE IFRAME"
+   7. TARJETA DE ÉXITO - VERSIÓN DE CONTROL TOTAL
    ============================================================ */
 #custom-success-card {
-    /* 'fixed' asegura que cubra todo el espacio visual disponible del iframe */
     position: fixed !important; 
     top: 0 !important;
     left: 0 !important;
     width: 100vw !important;
     height: 100vh !important;
-    
-    /* Fondo sólido para tapar cualquier residuo del formulario */
-    background-color: #ffffff !important;
-    
-    /* Prioridad máxima absoluta */
-    z-index: 999999999 !important;
-    
-    /* Flexbox para centrar logo y textos */
-    display: none; /* El JS cambia esto a 'flex' al detectar el éxito */
+    background-color: #ffffff !important; /* Blanco puro para neutralizar el fondo */
+    z-index: 2147483647 !important; /* El valor máximo permitido por los navegadores */
+    display: none; 
     flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
 }
 
-/* Clase que activa la visibilidad */
-.success-visible { 
-    display: flex !important; 
-}
+.success-visible { display: flex !important; }
 
-/* --- CONTROL DE TIPOGRAFÍA --- */
-.card-content h2 { 
-    font-family: 'Roboto', sans-serif !important;
-    color: rgb(15, 99, 167) !important; /* Azul de tu marca */
-    font-size: 26px !important;
-    font-weight: 900 !important;
-    margin-bottom: 15px !important;
-    text-transform: uppercase !important;
-}
-
-.card-content p { 
-    font-family: 'Roboto', sans-serif !important;
-    color: #333333 !important;
-    font-size: 16px !important;
-    line-height: 1.6 !important;
-    padding: 0 20px !important; /* Evita que el texto toque los bordes en móvil */
-}
-
-/* --- BOTÓN CERRAR (ACCESO DIRECTO) --- */
+/* Botón cerrar con prioridad sobre el iframe */
 #close-success {
     position: absolute !important;
     top: 20px !important;
     right: 20px !important;
-    background: #eeeeee !important; /* Gris claro para que resalte */
-    color: #333 !important;
+    background: #333 !important;
+    color: white !important;
     border: none !important;
-    width: 45px !important;
-    height: 45px !important;
+    width: 50px !important;
+    height: 50px !important;
     border-radius: 50% !important;
-    font-size: 28px !important;
+    font-size: 30px !important;
     cursor: pointer !important;
-    z-index: 1000000000 !important;
     display: flex !important;
     align-items: center;
     justify-content: center;
-    transition: background 0.3s ease;
-}
-
-#close-success:hover {
-    background: #dddddd !important;
-}
-
-/* --- BARRA DE PROGRESO --- */
-.progress-container {
-    width: 200px; /* Ancho fijo para que se vea elegante */
-    background: #f0f0f0;
-    height: 5px;
-    margin-top: 30px;
-    border-radius: 10px;
-    overflow: hidden;
-}
-
-.progress-bar {
-    height: 100%;
-    background: rgb(15, 99, 167);
-    width: 0%;
 }
  
 </style>
@@ -257,38 +207,48 @@
         </div>
     </div>
 
-    <script>
-        function activarExitoTotal() {
-            const successCard = document.getElementById('custom-success-card');
-            const formDiv = document.getElementById('salesUpForm-1');
-            const progressBar = document.querySelector('.progress-bar');
+   <script>
+    function activarExitoTotal() {
+        const successCard = document.getElementById('custom-success-card');
+        const formDiv = document.getElementById('salesUpForm-1');
+        const progressBar = document.querySelector('.progress-bar');
 
-            // 1. Ocultar formulario
-            if (formDiv) formDiv.style.setProperty('display', 'none', 'important');
+        // 1. Mostramos tu tarjeta inmediatamente para tapar el "rectángulo"
+        successCard.classList.add('success-visible');
 
-            // 2. Mostrar tarjeta personalizada
-            successCard.classList.add('success-visible');
+        // 2. Ocultamos el div del formulario para que no genere scroll
+        if (formDiv) formDiv.style.display = 'none';
 
-            // 3. Barra de progreso
-            progressBar.style.animation = "loadingBar 5000ms linear forwards";
+        // 3. Animación de la barra (Visual para el usuario)
+        if (progressBar) progressBar.style.animation = "loadingBar 3000ms linear forwards";
 
-            // 4. RECARGA DE LA PÁGINA PADRE (La web principal) en 5 segundos
-            setTimeout(() => {
-                window.top.location.reload();
-            }, 5000);
-        }
-
-        // El observador ahora busca cualquier cambio de texto que indique éxito
-        const guardian = new MutationObserver((mutations) => {
-            const bodyText = document.body.innerText;
-            // Si detectamos éxito, activamos nuestra capa
-            if (bodyText.includes("Exito") || bodyText.includes("enviados") || bodyText.includes("gracias")) {
-                guardian.disconnect();
-                activarExitoTotal();
+        // 4. ACCIÓN AGRESIVA: Recargar la página PADRE (la web principal)
+        // Usamos un tiempo corto (3 segundos) para que el mensaje verde de Upnify desaparezca rápido al recargar
+        setTimeout(() => {
+            try {
+                // Intenta recargar la página principal
+                window.top.location.reload(true);
+            } catch (e) {
+                // Si hay bloqueo de seguridad, intenta redirigir a la misma URL
+                window.top.location.href = window.top.location.href;
             }
-        });
+        }, 3000);
+    }
 
-        guardian.observe(document.body, { childList: true, subtree: true });
-    </script>
+    const guardian = new MutationObserver((mutations) => {
+        // Buscamos cualquier cambio que indique que el formulario se envió
+        // Upnify suele vaciar el form o poner mensajes de "gracias"
+        if (document.body.innerText.includes("Exito") || 
+            document.body.innerText.includes("enviados") || 
+            document.body.innerText.includes("gracias")) {
+            
+            guardian.disconnect();
+            activarExitoTotal();
+        }
+    });
+
+    // Empezamos a vigilar
+    guardian.observe(document.body, { childList: true, subtree: true });
+</script>
 </body>
 </html>
