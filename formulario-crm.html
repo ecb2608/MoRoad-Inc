@@ -139,15 +139,230 @@
         transform: translateY(-2px) !important;       /* El botón sube un poquito */
         box-shadow: 0 5px 15px rgba(15, 99, 167, 0.4) !important; /* Sombra azul brillante */
     }
+
+    /* ============================================================
+   7. ESTILO DE LA TARJETA DE ÉXITO (LOGO Y TIPOGRAFÍA)
+   ============================================================ */
+#custom-success-card {
+    position: absolute; /* Coloca el mensaje sobre el formulario sin mover nada */
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    
+    /* FONDO Y BLUR: Fondo blanco casi opaco (0.9) con efecto de desenfoque */
+    background-color: rgba(255, 255, 255, 0.9) !important; 
+    backdrop-filter: blur(8px); /* Crea el efecto de vidrio borroso */
+    -webkit-backdrop-filter: blur(8px); /* Compatibilidad para navegadores Safari/iOS */
+    
+    z-index: 100; /* Asegura que el mensaje tape los campos del formulario */
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 12px; /* Redondeo de esquinas para que encaje en tu tarjeta */
+    transition: opacity 0.5s ease-in-out; /* Fundido suave al aparecer */
+}
+
+/* --- ANIMACIÓN DEL LOGO --- */
+.success-icon { 
+    margin-bottom: 25px; /* Espacio entre el logo y el título */
+    display: inline-block; /* Permite que el logo se mueva correctamente */
+    
+    /* Animación "bounceLogo": 0.8s de duración, movimiento infinito y alternado */
+    animation: bounceLogo 1s ease-in-out infinite alternate;
+}
+
+/* Definimos el movimiento del logo (sube y baja ligeramente) */
+@keyframes bounceLogo {
+    from { transform: translateY(0); }
+    to { transform: translateY(-8px); } /* Sube 8 píxeles */
+}
+
+/* --- CONTROL DE TIPOGRAFÍA DE LOS MENSAJES --- */
+.card-content h2 { 
+    /* Cambia aquí la fuente, tamaño y color del Título */
+    font-family: 'Roboto', sans-serif; /* Puedes poner la fuente de tu web aquí */
+    color: rgb(15, 99, 167); /* Color azul Motorcycles Road Inc. */
+    font-size: 24px; /* Tamaño del título */
+    font-weight: 900; /* Grosor de la letra (muy negrita) */
+    margin: 0 0 10px 0; /* Margen inferior para separar del párrafo */
+    text-transform: uppercase; /* Fuerza el título a mayúsculas */
+    letter-spacing: 1.5px; /* Espaciado entre letras para un look moderno */
+}
+
+.card-content p { 
+    /* Cambia aquí la fuente y estilo del mensaje descriptivo */
+    font-family: 'Roboto', sans-serif;
+    color: #444444; /* Color gris oscuro para lectura fácil */
+    font-size: 16px; /* Tamaño del texto */
+    line-height: 1.6; /* Altura de línea para que el texto no esté amontonado */
+    font-weight: 400; /* Grosor normal */
+    margin: 0; /* Sin márgenes extra */
+}
+
+/* --- CONTROL DE VISIBILIDAD --- */
+.success-hidden { 
+    opacity: 0; 
+    visibility: hidden; 
+    pointer-events: none; /* Inhabilita clics mientras está oculto */
+}
+
+.success-visible { 
+    opacity: 1 !important; 
+    visibility: visible !important; 
+    pointer-events: all !important; /* Habilita clics cuando se muestra */
+}
+
+/* --- BARRA DE PROGRESO --- */
+.progress-container {
+    width: 70%; /* Ancho de la barra respecto a la tarjeta */
+    background: #e0e0e0; /* Color gris de fondo de la barra */
+    height: 4px; /* Grosor de la barra */
+    margin: 25px auto 0 auto; /* Centrado y separación superior */
+    border-radius: 10px; 
+    overflow: hidden; /* Corta el color azul cuando se llena */
+}
+
+.progress-bar {
+    height: 100%; 
+    background: rgb(15, 99, 167); /* Color azul que se va llenando */
+    width: 0%; /* Inicia vacía */
+}
+
+/* --- BOTÓN DE CERRAR DENTRO DE LA TARJETA --- */
+#close-success {
+    position: absolute; /* Se ubica de forma independiente dentro de la tarjeta */
+    top: 15px;          /* Distancia desde el borde superior */
+    right: 15px;        /* Distancia desde el borde derecho */
+    background: none;   /* Sin fondo */
+    border: none;       /* Sin bordes */
+    font-size: 28px;    /* Tamaño de la 'X' */
+    color: #999;        /* Color gris suave inicial */
+    cursor: pointer;    /* Cambia el cursor a mano al pasar encima */
+    line-height: 1;     /* Ajusta la altura para que la X esté centrada */
+    transition: color 0.3s ease, transform 0.3s ease; /* Animación suave */
+    z-index: 101;       /* Por encima del contenido del mensaje */
+}
+
+/* Efecto al pasar el mouse por el botón de cerrar */
+#close-success:hover {
+    color: rgb(15, 99, 167); /* Cambia al azul de tu marca */
+    transform: scale(1.2);    /* Crece un poquito para indicar que es clickeable */
+}
+
+/* Ajuste al contenedor padre para que el botón se posicione correctamente */
+#custom-success-card {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(255, 255, 255, 0.95) !important; /* Un poco más opaco para leer mejor */
+    backdrop-filter: blur(10px); /* Efecto de desenfoque */
+    -webkit-backdrop-filter: blur(10px);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+}
+
 </style>
 </head>
 <body>
-    <div class="card-form">
-    <script>
-    (function () { var _sp = window._sp || (window._sp = []); if (!_sp.loaded) { var sps = document.createElement('script'); sps.async = true; sps.src = 'https://assets.upnify.com/scripts/forms/js/spf.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(sps, s); _sp.loaded = true; } })(); window._sp = window._sp || [] ; _sp.addForm = function(config){window._sp.push(config)};
-    _sp.addForm({ 'formId': 'eyJlIjoiMTE2NzM1IiwidCI6IlAyNUM1NDY3M0ExLUQyQTEtNDY0Ri04NUE5LTE5OTNCOTQ0RkFFQiJ9' }); 
-    </script>
+    <div class="card-form" style="position: relative;"> 
+        
+        <script>
+            (function () { 
+                var _sp = window._sp || (window._sp = []); 
+                if (!_sp.loaded) { 
+                    var sps = document.createElement('script'); 
+                    sps.async = true; 
+                    sps.src = 'https://assets.upnify.com/scripts/forms/js/spf.js'; 
+                    var s = document.getElementsByTagName('script')[0]; 
+                    s.parentNode.insertBefore(sps, s); 
+                    _sp.loaded = true; 
+                } 
+            })(); 
+            window._sp = window._sp || [] ; 
+            _sp.addForm = function(config){window._sp.push(config)};
+            // Aquí se indica qué formulario específico debe dibujarse en pantalla
+            _sp.addForm({ 'formId': 'eyJlIjoiMTE2NzM1IiwidCI6IlAyNUM1NDY3M0ExLUQyQTEtNDY0Ri04NUE5LTE5OTNCOTQ0RkFFQiJ9' }); 
+        </script>
+        
         <div id="salesUpForm-1"></div>
+
+        <div id="custom-success-card" class="success-hidden">
+            
+            <button id="close-success" title="Cerrar">&times;</button>
+            
+            <div class="card-content">
+                <div class="success-icon">
+                    <img src="assets/images/logo.png" style="width: 80px; height: auto;" alt="Logo Motorcycles">
+                </div>
+                
+                <h2>¡DATOS RECIBIDOS!</h2>
+                <p>Gracias por contactar a <strong>Motorcycles Road Inc.</strong><br>
+                En breve un asesor comercial se comunicará contigo.</p>
+                
+                <div class="progress-container">
+                    <div class="progress-bar"></div>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <script>
+        // Se ejecuta solo cuando toda la página y sus recursos han cargado
+        window.addEventListener('load', function() {
+            // Referencias a los elementos del HTML para poder manipularlos
+            const formContainer = document.querySelector('#salesUpForm-1');
+            const successCard = document.getElementById('custom-success-card');
+            const progressBar = document.querySelector('.progress-bar');
+            const closeBtn = document.getElementById('close-success');
+
+            const duracionMensaje = 5000; // Definimos que el mensaje dure 5 segundos
+            let timeoutRecarga; // Variable para guardar el temporizador y poder cancelarlo si se usa la 'X'
+
+            // Función que limpia la pantalla recargando la página
+            const finalizarMensaje = () => {
+                window.location.reload();
+            };
+
+            // Si el usuario hace clic en la 'X', recargamos de inmediato
+            closeBtn.addEventListener('click', function() {
+                clearTimeout(timeoutRecarga); // Detenemos el reloj de 5 segundos
+                finalizarMensaje();
+            });
+
+            /* MUTATION OBSERVER: 
+              Es como un guardia de seguridad que vigila el formulario. 
+              Upnify cambia el contenido del DIV cuando el envío es exitoso; 
+              nosotros detectamos ese cambio.
+            */
+            const observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    // Convertimos el texto a minúsculas para evitar errores de detección
+                    const textoForm = formContainer.innerText.toLowerCase();
+                    
+                    // Si el texto interno ahora dice 'enviados' o 'gracias'...
+                    if (textoForm.includes('enviados') || textoForm.includes('gracias')) {
+                        
+                        // Dejamos de vigilar para ahorrar memoria
+                        observer.disconnect();
+
+                        // Quitamos la clase que lo oculta y ponemos la que lo muestra
+                        successCard.classList.remove('success-hidden');
+                        successCard.classList.add('success-visible');
+                        
+                        // Activamos la animación de la barra de progreso mediante código
+                        progressBar.style.animation = `loadingBar ${duracionMensaje}ms linear forwards`;
+
+                        // Iniciamos la cuenta regresiva para recargar la página
+                        timeoutRecarga = setTimeout(finalizarMensaje, duracionMensaje);
+                    }
+                });
+            });
+
+            // Activamos el guardia (observer) para que empiece a mirar dentro del formulario
+            if (formContainer) {
+                observer.observe(formContainer, { childList: true, subtree: true });
+            }
+        });
+    </script>
 </body>
 </html>
