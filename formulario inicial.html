@@ -1,0 +1,149 @@
+<!--Formulario Sitio WEB Conexion API CRM Upnify-->
+
+<section class="section-form-upnify">
+    <div class="row">
+        <div class="contact-container">
+            <h2>¿Listo para la aventura? Contáctanos</h2>
+            <p class="text-center">Déjanos tus datos y un asesor te contactará a la brevedad.</p>
+            
+            <form id="upnify-form" class="form-crm">
+                <div style="display:none;">
+                    <input type="text" name="honeypot" id="honeypot">
+                </div>
+
+                <input type="hidden" name="utm_source" id="utm_source" value="">
+                <input type="hidden" name="utm_medium" id="utm_medium" value="">
+                <input type="hidden" name="utm_campaign" id="utm_campaign" value="">
+                <input type="hidden" name="utm_term" id="utm_term" value="">
+                <input type="hidden" name="utm_content" id="utm_content" value="">
+
+                <div class="form-group">
+                    <input type="text" name="nombre" id="nombre" placeholder="Nombre(s)*" required class="input-field">
+                    <input type="text" name="apellidos" id="apellidos" placeholder="Apellidos*" required class="input-field">
+                </div>
+
+                <div class="form-group">
+                    <input type="email" name="correo" id="correo" placeholder="Correo Electrónico*" required class="input-field">
+                    <input type="tel" name="movil" id="movil" placeholder="Móvil (10 dígitos)*" required pattern="[0-9]{10}" class="input-field">
+                </div>
+
+                <div class="form-group">
+                    <select name="estado" id="estado" required class="select-field">
+                        <option value="" disabled selected>Selecciona tu Estado*</option>
+                        <option value="Aguascalientes">Aguascalientes</option>
+                        <option value="Baja California">Baja California</option>
+                        <option value="Baja California Sur">Baja California Sur</option>
+                        <option value="Campeche">Campeche</option>
+                        <option value="Chiapas">Chiapas</option>
+                        <option value="Chihuahua">Chihuahua</option>
+                        <option value="CDMX">Ciudad de México</option>
+                        <option value="Coahuila">Coahuila</option>
+                        <option value="Colima">Colima</option>
+                        <option value="Durango">Durango</option>
+                        <option value="México">Estado de México</option>
+                        <option value="Guanajuato">Guanajuato</option>
+                        <option value="Guerrero">Guerrero</option>
+                        <option value="Hidalgo">Hidalgo</option>
+                        <option value="Jalisco">Jalisco</option>
+                        <option value="Michoacán">Michoacán</option>
+                        <option value="Morelos">Morelos</option>
+                        <option value="Nayarit">Nayarit</option>
+                        <option value="Nuevo León">Nuevo León</option>
+                        <option value="Oaxaca">Oaxaca</option>
+                        <option value="Puebla">Puebla</option>
+                        <option value="Querétaro">Querétaro</option>
+                        <option value="Quintana Roo">Quintana Roo</option>
+                        <option value="San Luis Potosí">San Luis Potosí</option>
+                        <option value="Sinaloa">Sinaloa</option>
+                        <option value="Sonora">Sonora</option>
+                        <option value="Tabasco">Tabasco</option>
+                        <option value="Tamaulipas">Tamaulipas</option>
+                        <option value="Tlaxcala">Tlaxcala</option>
+                        <option value="Veracruz">Veracruz</option>
+                        <option value="Yucatán">Yucatán</option>
+                        <option value="Zacatecas">Zacatecas</option>
+                    </select>
+
+                    <select name="oferta" id="oferta" required class="select-field">
+                        <option value="" disabled selected>Oferta Comercial*</option>
+                        <option value="Cursos de Manejo">Cursos de Manejo</option>
+                        <option value="Motocicletas">Motocicletas</option>
+                        <option value="Tours">Tours</option>
+                    </select>
+                </div>
+
+                <div class="form-group-full">
+                    <textarea name="comentarios" id="comentarios" placeholder="Cuéntanos más sobre tu interés..." class="textarea-field"></textarea>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" id="btn-submit" class="btn-submit-crm">Enviar Información</button>
+                </div>
+
+                <div id="form-status" class="status-msg"></div>
+            </form>
+        </div>
+    </div>
+</section>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // 1. Captura de UTMs de la URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const utms = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'];
+        utms.forEach(utm => {
+            if(urlParams.get(utm)) {
+                document.getElementById(utm).value = urlParams.get(utm);
+            }
+        });
+
+        const form = document.getElementById('upnify-form');
+        const statusMsg = document.getElementById('form-status');
+        const btnSubmit = document.getElementById('btn-submit');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Validación Antispam (Honeypot)
+            if (document.getElementById('honeypot').value !== "") {
+                console.warn("Spam detectado");
+                return;
+            }
+
+            // Efecto Visual: Procesando
+            btnSubmit.disabled = true;
+            btnSubmit.innerText = "Procesando info...";
+            statusMsg.innerHTML = "Estamos enviando tu solicitud...";
+            statusMsg.className = "status-msg processing";
+
+            // Recolección de datos
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+
+            // Envío al API de Upnify
+            fetch('https://api.salesup.com/v4/integraciones/P25AP38E4C439-91FB-4DC2-9151-F46A4EEFB7CC', {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    statusMsg.innerHTML = "¡Gracias! Tu información se ha enviado con éxito.";
+                    statusMsg.className = "status-msg success";
+                    form.reset();
+                    btnSubmit.innerText = "Enviado";
+                } else {
+                    throw new Error('Error en el servidor');
+                }
+            })
+            .catch(error => {
+                statusMsg.innerHTML = "Hubo un problema. Por favor intenta más tarde.";
+                statusMsg.className = "status-msg error";
+                btnSubmit.disabled = false;
+                btnSubmit.innerText = "Reintentar envío";
+            });
+        });
+    });
+</script>

@@ -343,8 +343,7 @@ footer p {
 }
 
 
-/* 
-media queries */
+/* media queries */
 
 
 /* tablet grandes de 1023px a 1200px */
@@ -429,3 +428,97 @@ media queries */
         margin-top: 140px;
     }
 }
+
+/* ================================================================= 
+   ADICIONES PARA EL FORMULARIO CRM (UNA SOLA COLUMNA)
+   ================================================================= */
+
+.section-form-upnify { 
+    background-color: #f4f4f4; 
+}
+
+.contact-container { 
+    max-width: 700px; 
+    margin: 0 auto; 
+    background: #fff; 
+    padding: 40px; 
+    border-radius: 8px; 
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+}
+
+/* Campos en una sola columna con mismo tamaño */
+.form-field-wrapper {
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.input-field, 
+.select-field, 
+.textarea-field { 
+    width: 100%; 
+    padding: 15px; 
+    border: 1px solid #077b52; 
+    border-radius: 4px; 
+    font-family: 'Roboto', sans-serif; 
+    font-size: 18px; 
+    font-weight: 300;
+}
+
+.textarea-field { 
+    height: 120px; 
+    resize: none; 
+}
+
+/* Estilo del Botón de Envío (Personalizable) */
+.btn-submit-crm {
+    display: block;
+    width: 100%;
+    padding: 15px;
+    font-size: 20px;
+    font-weight: 300;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 5px; 
+    cursor: pointer;
+    font-family: "Roboto", sans-serif;
+    transition: all 0.3s;
+
+    /* Cambia estos colores según tu preferencia */
+    background-color: transparent;      
+    color: rgb(15, 99, 167);            
+    border: 2px solid rgb(15, 99, 167); 
+}
+
+.btn-submit-crm:hover {
+    background-color: rgb(15, 99, 167); 
+    color: #fff;
+}
+
+/* Estilos de validación y mensajes */
+.form-crm.was-validated .input-field:invalid,
+.form-crm.was-validated .select-field:invalid {
+    border: 2px solid #e74c3c;
+}
+
+.error-hint {
+    color: #e74c3c;
+    font-size: 14px;
+    margin-top: 5px;
+    display: none;
+}
+
+.form-crm.was-validated :invalid ~ .error-hint {
+    display: block;
+}
+
+.status-msg {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 4px;
+    text-align: center;
+    display: none;
+}
+
+.status-msg.processing { background: #d1ecf1; color: #0c5460; display: block; }
+.status-msg.success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; display: block; }
+.status-msg.error { background: #f8d7da; color: #721c24; display: block; }
