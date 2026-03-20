@@ -6,37 +6,50 @@
     <title>Motorcyrcles Road Inc.</title>
 <script>
   (function() {
-    const tke = "E-682C05FA-A9A9-4BB0-9364-BD6C3C9FC306";
-    const tki = "P268A77E508-6228-402A-8467-5F66A10C9389";
-    const tkw = "37EECBEC-380F-4866-BFE3-83D35561E579";
-
-    // 1. Script Principal
-    const script = document.createElement("script");
-    script.id = "upnifyWAOS";
-    script.async = true;
-    script.src = "https://suite.upnify.com/addons/js/suite.min.js?tke=" + tke + "&tki=" + tki;
-
-    script.onload = function() {
-      const checkSuite = setInterval(() => {
-        if (window.Suite && window.Suite.Mkt && typeof window.Suite.Mkt.setNewWidget === "function") {
-          clearInterval(checkSuite);
-          Suite.Mkt.setNewWidget({
-            tkWidget: tkw,
-            tkIntegration: tki,
-            notDestroy: true
-          });
-        }
-      }, 100);
-      setTimeout(() => clearInterval(checkSuite), 5000);
+    const config = {
+      tke: "E-682C05FA-A9A9-4BB0-9364-BD6C3C9FC306",
+      tki: "P268A77E508-6228-402A-8467-5F66A10C9389",
+      tkw: "37EECBEC-380F-4866-BFE3-83D35561E579"
     };
 
-    // 2. Tracking
-    const trackScript = document.createElement('script');
-    trackScript.async = true;
-    trackScript.src = 'https://assets.upnify.com/scripts/tracking.js';
+    function initUpnify() {
+      // Si ya existe el script, no lo duplicamos, solo re-lanzamos el widget
+      if (!document.getElementById("upnifyWAOS")) {
+        const s = document.createElement("script");
+        s.id = "upnifyWAOS";
+        s.async = true;
+        s.src = "https://suite.upnify.com/addons/js/suite.min.js?tke=" + config.tke + "&tki=" + config.tki;
+        document.head.appendChild(s);
+      }
 
-    document.head.appendChild(script);
-    document.head.appendChild(trackScript);
+      // El secreto: Intentar despertar al widget varias veces tras la carga
+      let attempts = 0;
+      const forceWidget = setInterval(() => {
+        attempts++;
+        if (window.Suite && window.Suite.Mkt && typeof window.Suite.Mkt.setNewWidget === "function") {
+          window.Suite.Mkt.setNewWidget({
+            tkWidget: config.tkw,
+            tkIntegration: config.tki,
+            notDestroy: true
+          });
+          clearInterval(forceWidget);
+        }
+        if (attempts > 30) clearInterval(forceWidget); // Deja de intentar a los 3 segundos
+      }, 100);
+    }
+
+    // Disparamos la función tanto en carga normal como en recargas rápidas
+    if (document.readyState === "complete") {
+      initUpnify();
+    } else {
+      window.addEventListener("load", initUpnify);
+    }
+
+    // Tracking (fuera de la lógica del widget para no estorbar)
+    const t = document.createElement('script');
+    t.async = true;
+    t.src = 'https://assets.upnify.com/scripts/tracking.js';
+    document.head.appendChild(t);
   })();
 </script>
     <link rel="stylesheet" href="assets/css/normalize.css">
