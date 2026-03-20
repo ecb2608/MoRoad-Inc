@@ -6,48 +6,47 @@
     <title>Motorcyrcles Road Inc.</title>
 <script>
   (function() {
-    // 1. Datos de configuración
     const config = {
       tke: "E-682C05FA-A9A9-4BB0-9364-BD6C3C9FC306",
       tki: "P268A77E508-6228-402A-8467-5F66A10C9389",
       tkw: "37EECBEC-380F-4866-BFE3-83D35561E579"
     };
 
-    // 2. Función que despierta el widget
     function startUpnify() {
-      // Evitamos duplicados
-      if (document.getElementById("upnifyWAOS_Final")) return;
+      // 1. Inyectamos el script principal
+      if (!document.getElementById("upnify-script")) {
+        const s = document.createElement("script");
+        s.id = "upnify-script";
+        s.async = true;
+        s.src = "https://suite.upnify.com/addons/js/suite.min.js?tke=" + config.tke + "&tki=" + config.tki;
+        
+        s.onload = function() {
+          // 2. Ejecutamos el comando que te funcionó manualmente en la consola
+          let attempts = 0;
+          const interval = setInterval(() => {
+            attempts++;
+            if (window.Suite?.Mkt?.setNewWidget) {
+              window.Suite.Mkt.setNewWidget({
+                tkWidget: config.tkw,
+                tkIntegration: config.tki,
+                notDestroy: true
+              });
+              clearInterval(interval);
+            }
+            if (attempts > 50) clearInterval(interval);
+          }, 150);
+        };
+        document.head.appendChild(s);
+      }
 
-      const s = document.createElement("script");
-      s.id = "upnifyWAOS_Final";
-      s.async = true;
-      s.src = "https://suite.upnify.com/addons/js/suite.min.js?tke=" + config.tke + "&tki=" + config.tki;
-      
-      s.onload = function() {
-        let count = 0;
-        const interval = setInterval(() => {
-          count++;
-          if (window.Suite?.Mkt?.setNewWidget) {
-            window.Suite.Mkt.setNewWidget({
-              tkWidget: config.tkw,
-              tkIntegration: config.tki,
-              notDestroy: true
-            });
-            clearInterval(interval);
-          }
-          if (count > 50) clearInterval(interval);
-        }, 100);
-      };
-      document.body.appendChild(s);
-
-      // Tracking
+      // 3. Script de Tracking independiente
       const t = document.createElement('script');
       t.async = true;
       t.src = 'https://assets.upnify.com/scripts/tracking.js';
-      document.body.appendChild(t);
+      document.head.appendChild(t);
     }
 
-    // 3. Ejecución forzada al terminar de cargar todo
+    // Disparar cuando la página esté lista
     if (document.readyState === "complete") {
       startUpnify();
     } else {
