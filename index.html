@@ -9,19 +9,21 @@
     const tke = "E-682C05FA-A9A9-4BB0-9364-BD6C3C9FC306";
     const tki = "P268A77E508-6228-402A-8467-5F66A10C9389";
     const tkw = "37EECBEC-380F-4866-BFE3-83D35561E579";
+    // Generamos un número único para que el navegador no use una versión vieja del script
+    const cb = new Date().getTime();
 
-    // 1. Cargamos el script principal
+    // 1. Cargamos el script principal con protección de caché
     const script = document.createElement("script");
     script.id = "upnifyWAOS";
     script.async = true;
-    script.src = `https://suite.upnify.com/addons/js/suite.min.js?tke=${tke}&tki=${tki}`;
+    script.src = `https://suite.upnify.com/addons/js/suite.min.js?tke=${tke}&tki=${tki}&v=${cb}`;
 
     script.onload = function() {
-      // 2. Una vez cargado el JS, esperamos a que el objeto Suite esté disponible
+      // 2. Esperamos a que el motor de Upnify esté listo
       const checkSuite = setInterval(() => {
         if (window.Suite && window.Suite.Mkt && typeof window.Suite.Mkt.setNewWidget === "function") {
           clearInterval(checkSuite);
-          // 3. Forzamos la activación del widget
+          // 3. Forzamos la activación del widget de WhatsApp
           Suite.Mkt.setNewWidget({
             tkWidget: tkw,
             tkIntegration: tki,
@@ -30,14 +32,14 @@
         }
       }, 200);
       
-      // Limpiamos el intervalo tras 5 segundos por seguridad
+      // Seguridad: dejamos de buscar después de 5 segundos
       setTimeout(() => clearInterval(checkSuite), 5000);
     };
 
-    // 4. Cargamos el tracking de forma independiente para que no bloquee al widget
+    // 4. Cargamos el tracking también con protección de caché
     const trackScript = document.createElement('script');
     trackScript.async = true;
-    trackScript.src = 'https://assets.upnify.com/scripts/tracking.js';
+    trackScript.src = `https://assets.upnify.com/scripts/tracking.js?v=${cb}`;
 
     document.head.appendChild(script);
     document.head.appendChild(trackScript);
